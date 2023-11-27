@@ -1,0 +1,29 @@
+﻿@page "/"
+@using TodoWithBlazor.Data;
+@using TodoWithBlazor.Services;
+@inject ITodoService _todoService;
+
+<PageTitle>Todo List</PageTitle>
+
+<div class="border" style="padding: 20px; margin-top: 20px;">
+    <h4>New Item</h4>
+    <TodoItemForm OnItemAdded="@ItemAdded" />
+</div>
+
+@code {
+    private IList<TodoItem> Todos { get; set; } = new List<TodoItem>();
+
+    protected override void OnInitialized()
+    {
+        Todos = _todoService.GetAll().ToList();
+    }
+    public void ItemAdded()
+    {
+        Todos = _todoService.GetAll().ToList();
+        StateHasChanged();
+    }
+    public string ItemClass(TodoItem item)
+    {
+        return item.Completed ? "item-completed" : "  ";
+    }
+}
